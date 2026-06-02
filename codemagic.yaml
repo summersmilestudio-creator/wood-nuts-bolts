@@ -15,6 +15,7 @@ workflows:
           xcodebuild -version
       - name: Flutter clean & pub get
         script: |
+          flutter config --no-enable-swift-package-manager
           flutter clean
           flutter pub get
       - name: Generate app icons
@@ -60,6 +61,7 @@ workflows:
         script: xcode-project use-profiles
       - name: Flutter clean & pub get
         script: |
+          flutter config --no-enable-swift-package-manager
           flutter clean
           flutter pub get
       - name: Generate app icons
