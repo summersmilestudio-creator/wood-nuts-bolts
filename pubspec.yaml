@@ -1,0 +1,40 @@
+name: nuts_bolts
+description: "Wood Nuts & Bolts — screw puzzle"
+publish_to: 'none'
+version: 1.0.1+2
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.3.2
+  upgrader: ^11.4.0
+  in_app_review: ^2.0.9
+  google_mobile_ads: ^5.3.1
+  in_app_purchase: ^3.2.0
+  audioplayers: ^6.1.0
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
+  flutter_timezone: ^3.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/app_icon.png"
+  remove_alpha_ios: true
+  min_sdk_android: 23
+  adaptive_icon_background: "#CB9A5C"
+  adaptive_icon_foreground: "assets/app_icon.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/sfx/

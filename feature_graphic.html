@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1024px; height:500px; overflow:hidden; }
+  .wrap {
+    width:1024px; height:500px; position:relative;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,.04) 0 2px, transparent 2px 26px),
+      linear-gradient(160deg,#d9a866 0%, #c8915a 38%, #b87b46 70%, #a86a38 100%);
+    font-family:'Trebuchet MS','Segoe UI',sans-serif; overflow:hidden;
+  }
+  .grain { position:absolute; inset:0;
+    background:repeating-linear-gradient(88deg, rgba(120,72,30,.10) 0 6px, rgba(160,100,50,.04) 6px 14px); }
+  .vignette { position:absolute; inset:0; box-shadow:inset 0 0 160px rgba(60,30,10,.55); }
+  .left { position:absolute; left:60px; top:0; height:500px; width:600px; display:flex; flex-direction:column; justify-content:center; }
+  .title { font-size:96px; font-weight:900; color:#fff8ec; line-height:.95;
+    text-shadow:0 4px 0 #6d3f17, 0 8px 18px rgba(0,0,0,.45); letter-spacing:-1px; }
+  .title .accent { color:#7ed3c4; }
+  .sub { margin-top:22px; font-size:40px; font-weight:800; color:#fff;
+    background:linear-gradient(180deg,#3aa,#1d7d72); display:inline-block; padding:10px 26px;
+    border-radius:14px; box-shadow:0 6px 0 #145a52, 0 10px 18px rgba(0,0,0,.35); }
+  .tag { margin-top:24px; font-size:30px; color:#43240d; font-weight:700; text-shadow:0 1px 0 rgba(255,255,255,.3); }
+  /* screws scattered */
+  .screw { position:absolute; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #f3e2bf, #c89a52 55%, #8a6326 100%);
+    box-shadow:0 4px 8px rgba(0,0,0,.4), inset 0 0 6px rgba(0,0,0,.2); }
+  .screw::before, .screw::after { content:''; position:absolute; background:#5d3f17; border-radius:3px; }
+  .screw::before { width:54%; height:11%; left:23%; top:44%; }
+  .screw::after { width:11%; height:54%; left:44%; top:23%; }
+  /* plank on the right */
+  .plank-stack { position:absolute; right:70px; top:50%; transform:translateY(-50%) rotate(-8deg); }
+  .plank { width:300px; height:64px; border-radius:34px; margin:18px 0; position:relative;
+    box-shadow:0 8px 0 rgba(0,0,0,.25), inset 0 3px 8px rgba(255,255,255,.25); }
+  .p1 { background:linear-gradient(180deg,#79c9b8,#3f9e8c); }
+  .p2 { background:linear-gradient(180deg,#e88f7a,#cf5b45); width:240px; }
+  .p3 { background:linear-gradient(180deg,#8fb86a,#5f923c); width:280px; }
+  .hole { position:absolute; width:34px; height:34px; border-radius:50%; top:15px;
+    background:radial-gradient(circle at 40% 35%,#f0e0bd,#b88f4c 60%,#7a591f);
+    box-shadow:inset 0 0 5px rgba(0,0,0,.5); }
+  .hole.l { left:20px; } .hole.r { right:20px; }
+</style></head>
+<body><div class="wrap">
+  <div class="grain"></div>
+  <div class="left">
+    <div class="title">Wood <span class="accent">Nuts</span><br>& Bolts</div>
+    <div><span class="sub">🔩 Screw Puzzle</span></div>
+    <div class="tag">Deșurubează • Sortează • Relaxează-te</div>
+  </div>
+  <div class="plank-stack">
+    <div class="plank p1"><div class="hole l"></div><div class="hole r"></div></div>
+    <div class="plank p2"><div class="hole l"></div><div class="hole r"></div></div>
+    <div class="plank p3"><div class="hole l"></div><div class="hole r"></div></div>
+  </div>
+  <div class="screw" style="width:46px;height:46px;left:560px;top:60px;"></div>
+  <div class="screw" style="width:34px;height:34px;left:640px;top:420px;"></div>
+  <div class="screw" style="width:28px;height:28px;left:70px;top:430px;"></div>
+  <div class="screw" style="width:30px;height:30px;left:500px;top:300px;"></div>
+  <div class="vignette"></div>
+</div></body></html>

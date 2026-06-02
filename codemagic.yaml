@@ -1,0 +1,91 @@
+workflows:
+  ios-test-build:
+    name: iOS Test Build (unsigned)
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Show versions
+        script: |
+          flutter --version
+          pod --version
+          xcodebuild -version
+      - name: Flutter clean & pub get
+        script: |
+          flutter clean
+          flutter pub get
+      - name: Generate app icons
+        script: dart run flutter_launcher_icons
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install --repo-update
+      - name: Flutter analyze
+        script: flutter analyze lib || true
+      - name: Build iOS (no codesign)
+        script: flutter build ios --release --no-codesign
+    artifacts:
+      - build/ios/iphoneos/Runner.app
+
+  ios-testflight:
+    name: iOS TestFlight Deploy
+    max_build_duration: 45
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      groups:
+        - default
+      vars:
+        BUNDLE_ID: "ro.summersmile.nutsBolts"
+        XCODE_WORKSPACE: "Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+    scripts:
+      - name: Set up keychain
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --certificate-key=@env:CERTIFICATE_PRIVATE_KEY \
+            --create
+      - name: Add certificates to keychain
+        script: keychain add-certificates
+      - name: Set up code signing on Xcode project
+        script: xcode-project use-profiles
+      - name: Flutter clean & pub get
+        script: |
+          flutter clean
+          flutter pub get
+      - name: Generate app icons
+        script: dart run flutter_launcher_icons
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install --repo-update
+      - name: Set TestFlight build number
+        script: |
+          LATEST=$(app-store-connect get-latest-testflight-build-number "$BUNDLE_ID" 2>/dev/null || echo "0")
+          NEW=$((LATEST + 1))
+          if [ "$NEW" -le 1 ]; then
+            NEW=$((PROJECT_BUILD_NUMBER + 10))
+          fi
+          echo "Build number: $NEW (latest on TestFlight was $LATEST)"
+          echo "TESTFLIGHT_BUILD_NUMBER=$NEW" >> $CM_ENV
+      - name: Flutter build ipa
+        script: |
+          flutter build ipa --release \
+            --build-number=$TESTFLIGHT_BUILD_NUMBER \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
