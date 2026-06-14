@@ -10,6 +10,25 @@ class RemoveAdsOffer {
   /// Once the user declines during a session we stop nagging until next launch.
   static bool _silencedForSession = false;
 
+  /// Rate-limit for the global "ad closed" upsell trigger so it never spams.
+  static DateTime? _lastShown;
+  static const Duration _cooldown = Duration(minutes: 2);
+
+  /// Driven by the global `adClosedTick` listener (App Open / interstitial
+  /// dismissed). Rate-limited to once every 2 minutes and skipped when ads are
+  /// already removed or the store is unavailable.
+  static Future<void> maybeShow(BuildContext? context) async {
+    if (context == null || !context.mounted) return;
+    final iap = IapService.instance;
+    if (iap.noAds || _silencedForSession || !iap.storeAvailable) return;
+    if (_lastShown != null &&
+        DateTime.now().difference(_lastShown!) < _cooldown) {
+      return;
+    }
+    _lastShown = DateTime.now();
+    await show(context, fromAd: true);
+  }
+
   /// Call right after an interstitial closes. No-op if ads already removed,
   /// already declined this session, or the store has nothing to sell.
   static Future<void> maybeShowAfterAd(BuildContext context) async {
