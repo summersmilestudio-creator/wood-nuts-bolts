@@ -116,7 +116,7 @@ class _GameScreenState extends State<GameScreen> {
         ),
         primaryLabel: '➕ Cutie extra (reclamă)',
         onPrimary: () async {
-          final ok = await AdsService.instance.showRewarded();
+          final ok = await AdsService.instance.showBonusAd();
           if (!mounted) return;
           Navigator.pop(context);
           _dialogOpen = false;
